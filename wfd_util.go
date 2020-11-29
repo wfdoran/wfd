@@ -6,7 +6,7 @@ func Hello() {
      fmt.Println("Hello from wfd_util.")
 }
 
-func gen_partitions(n int) <-chan []int {
+func GenPartitions(n int) <-chan []int {
 	ch := make(chan []int)
 
 	go func(ch chan []int) {
