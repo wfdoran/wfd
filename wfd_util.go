@@ -45,3 +45,30 @@ func GenPartitions(n int) <-chan []int {
 	}(ch)
 	return ch
 }
+
+func ExtendedGcd(a, b int64) (int64, int64, int64) {
+	if a < b {
+		x, y, g := ExtendedGcd(b, a)
+		return y, x, g
+	}
+
+	if b == 0 {
+		return 1, 0, a
+	}
+
+	t := a / b
+	r := a % b
+
+	x, y, g := ExtendedGcd(b, r)
+
+	return y, x - t *y, g
+}
+
+func ModInv(a, m int64) int64 {
+	_, x, g := ExtendedGcd(m, a)
+	if g != 1 {
+		return 0
+	}
+	return (x + m) % m
+}
+
