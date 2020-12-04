@@ -72,3 +72,60 @@ func ModInv(a, m int64) int64 {
 	return (x + m) % m
 }
 
+func ConvexMin(f func(float64) float64, left float64, right float64, eps float64) (float64, float64) {
+	a := left
+	b := (left + right) / 2.0
+	c := right
+
+	fa := f(a)
+	fb := f(b)
+	fc := f(c)
+
+	for c - a > eps {
+		if fb >= fa {
+			c = b
+			fc = fb
+			b = (a + c) / 2.0
+			fb = f(b)
+			continue
+		}
+
+		if fb >= fc {
+			a = b
+			fa = fb
+			b = (a + c) / 2.0
+			fb = f(b)
+			continue
+		}
+
+		if b - a > c - b {
+			x := (a + b) / 2.0
+			fx := f(x)
+
+			if (fx > fb) {
+				a = x
+				fa = fx
+			} else {
+				c = b
+				fc = fb
+				b = x
+				fb = fx
+			}
+		} else {
+			x := (b + c) / 2.0
+			fx := f(x)
+
+			if (fx > fb) {
+				c = x
+				fc = fx
+			} else {
+				a = b
+				fa = fb
+				b = x
+				fb = fx
+			}
+		}
+	}
+
+	return b, fb
+}
