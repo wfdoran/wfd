@@ -129,3 +129,27 @@ func ConvexMin(f func(float64) float64, left float64, right float64, eps float64
 
 	return b, fb
 }
+
+func IsSquare(x uint64) bool {
+	if x <= uint64(1) {
+		return true
+	}
+	lo := uint64(1)
+	hi := uint64(4294967296)
+	
+	for hi > lo + 1 {
+		mid := lo + (hi - lo) / 2
+		mid_sqr := mid * mid
+		
+		if mid_sqr == x {
+			return true
+		}
+		
+		if mid_sqr > x {
+			hi = mid
+		} else {
+			lo = mid
+		}
+	}
+	return false
+}
