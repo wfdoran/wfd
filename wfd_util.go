@@ -85,6 +85,37 @@ func GenKSubsets(n int, k int) <-chan []int {
 	return ch
 }
 
+func GenPermutations(n int) <-chan []int {
+	ch := make(chan []int)
+	
+	go func(ch chan[]int) {
+		for idx := 0; ; idx++ {
+			x := make([]int, n)
+			for i := 0; i < n; i++ {
+				x[i] = i
+			}
+		
+			state := idx
+			for i := 0; i < n; i++ {
+				j := state % (n - i)
+				temp := x[i]
+				x[i] = x[i + j]
+				x[i + j] = temp
+			
+				state = (state - j) / (i + 1)
+			}
+			
+			if state != 0 {
+				close(ch)
+				return
+			}
+			ch <- x
+		}
+	}(ch)
+	
+	return ch
+}
+
 func ExtendedGcd(a, b int64) (int64, int64, int64) {
 	if a < b {
 		x, y, g := ExtendedGcd(b, a)
