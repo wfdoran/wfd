@@ -46,6 +46,45 @@ func GenPartitions(n int) <-chan []int {
 	return ch
 }
 
+func GenKSubsets(n int, k int) <-chan []int {
+	ch := make(chan []int)
+	
+	
+	go func(ch chan []int) {
+	    thresh := make([]int, k)
+		state := make([]int, k)
+		for i := 0; i < k; i++ {
+		    thresh[k - 1 - i] = n - 1 - i 
+			state[i] = i
+		}
+		
+		for {
+			x := make([]int, k)
+			copy(x, state)
+			ch <- x
+			
+			if state[0] == thresh[0] {
+				close(ch)
+				return
+			}
+			
+			idx := k - 1
+			
+			for state[idx] == thresh[idx] {
+				idx--
+			}
+			
+			state[idx]++
+			for i := idx + 1; i < k; i++ {
+				state[i] = state[i-1] + 1
+			}
+		}
+	
+	}(ch)
+	
+	return ch
+}
+
 func ExtendedGcd(a, b int64) (int64, int64, int64) {
 	if a < b {
 		x, y, g := ExtendedGcd(b, a)
