@@ -142,6 +142,21 @@ func ModInv(a, m int64) int64 {
 	return (x + m) % m
 }
 
+func ModPow(b, e, m int64) int64 {
+        rv := int64(1)
+
+        a := b
+        for e > 0 {
+                if (e & 1) == 1 {
+                        rv = (rv * a) % m
+                }
+                a = (a * a) % m
+                e /= 2
+        }
+        return rv
+}
+
+
 func ConvexMin(f func(float64) float64, left float64, right float64, eps float64) (float64, float64) {
 	a := left
 	b := (left + right) / 2.0
